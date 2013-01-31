@@ -1,0 +1,27 @@
+src/output-plugins/Makefile:dvi: dvi-am
+src/output-plugins/Makefile:dvi-am:
+src/output-plugins/Makefile:install-dvi: install-dvi-am
+src/output-plugins/Makefile:install-dvi-am:
+src/output-plugins/Makefile:	distclean-tags distdir dvi dvi-am html html-am info info-am \
+src/output-plugins/Makefile:	install-dvi-am install-exec install-exec-am install-html \
+src/output-plugins/Makefile.in:dvi: dvi-am
+src/output-plugins/Makefile.in:dvi-am:
+src/output-plugins/Makefile.in:install-dvi: install-dvi-am
+src/output-plugins/Makefile.in:install-dvi-am:
+src/output-plugins/Makefile.in:	distclean-tags distdir dvi dvi-am html html-am info info-am \
+src/output-plugins/Makefile.in:	install-dvi-am install-exec install-exec-am install-html \
+src/output-plugins/kthttp.h:      case 207: return "Multi-Status";
+Binary file src/output-plugins/libspo.a matches
+src/output-plugins/spo_alert_cu_client.cpp:		std::string &ip = i->first();
+src/output-plugins/spo_alert_cu_client.cpp:		std::string &port_str = i->second();
+src/output-plugins/spo_alert_cu_cpp.cpp:    result = g_manager->ldbi->storeAlert(p, ip_src_str, port_src, ip_dst_str, port_dst);
+Binary file src/output-plugins/spo_alert_cu_cpp.o matches
+Binary file src/output-plugins/spo_alert_cu_kt.o matches
+Binary file src/output-plugins/spo_alert_cu_kt_mod.o matches
+Binary file src/output-plugins/spo_alert_cu_util.o matches
+src/output-plugins/spo_log_tcpdump.c://        stream_api->traverse_reassembled(p, SizeOfCallback, &dumpSize);
+src/output-plugins/spo_log_tcpdump.c://        stream_api->traverse_reassembled(p, LogTcpdumpStreamCallback, data);
+src/output-plugins/spo_platypus.c:    SnortSnprintf(buf, TMP_BUFFER, "%04i-%02i-%02i %02i:%02i:%02i.%06i",
+Binary file src/output-plugins/spo_platypus.o matches
+src/output-plugins/spo_sguil.c:    SnortSnprintf(buf, TMP_BUFFER, "%04i-%02i-%02i %02i:%02i:%02i",
+Binary file src/output-plugins/spo_sguil.o matches
