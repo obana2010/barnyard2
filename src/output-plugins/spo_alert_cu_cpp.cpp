@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 // Barnyard2 headers
 #include "unified2.h"
@@ -93,7 +94,51 @@ extern "C" void AlertCuInitCpp(SpoAlertCuData *ctx) {
     // CIDNに参加する。
     g_manager->joinCIDN();
 
- 	// batch modeではない場合、タイマーを設定
+    // 実験のためにスタートタイムを環境変数から取得する
+    char *starttimestr = getenv("STARTTIME");
+    if (starttimestr) {
+
+
+    	// スタートタイムの文字列を取得
+		time_t timer;
+		time(&timer);
+		struct tm *lt = localtime(&timer);
+		char starttime[100];
+		snprintf(starttime, sizeof(starttime), "%02d/%02d/%02d-%s:00",
+				lt->tm_year - 100, lt->tm_mon + 1, lt->tm_mday, starttimestr);
+		TRACEP1("waiting starttime [%1%]", starttime);
+
+		while (1) {
+
+			// 現在の文字列を取得
+			time(&timer);
+			lt = localtime(&timer);
+			char currenttime[100];
+			snprintf(currenttime, sizeof(currenttime), "%02d/%02d/%02d-%02d:%02d:%02d",
+					lt->tm_year - 100, lt->tm_mon + 1, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
+
+			//TRACEP1("currenttime [%1%]", currenttime);
+
+			if (strcmp(starttime, currenttime) <= 0) {
+				break;
+			}
+			usleep(100000); // 0.1秒
+
+		}
+
+		// スタートタイムのtmを取得
+// 		struct tm starttm;
+//		strptime(starttime, "%y/%m/%d-%H:%M:%S", &starttm);
+
+		// スタートタイムを文字列に戻してみる
+//		strftime(starttime, sizeof(starttime), "%y/%m/%d-%H:%M:%S", &starttm);
+//		TRACEP1("starttime2 [%1%]", starttime);
+
+		TRACEP("done!");
+
+    }
+
+    // batch modeではない場合、タイマーを設定
  	if (!ctx->isBatchMode) {
  		g_manager->setTimer();
  	}
