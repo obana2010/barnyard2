@@ -171,6 +171,7 @@ bool AlertStoreDB::shareBlackListNodes(
 // グローバルアラートの情報を指定して必要なノードに対して共有を行う
 bool AlertStoreDB::shareBlacklist(GlobalStoreRecord &globalStoreRecord, std::map<std::string, unsigned long> &sharedBlacklist) {
 
+	writelog("failed This method must not be called");
 	abort();
 #if 0
 	// アーキテクチャを判定
@@ -350,6 +351,7 @@ bool AlertStoreDB::checkBlacklistExpired() {
 // グローバルアラート閾値超過判定
 bool AlertStoreDB::checkGlobalThreshold() {
 
+	writelog("failed This method must not be called");
 	abort();
 	// ***********************************************************
 	// global alert store
@@ -767,6 +769,7 @@ bool AlertStoreDBAll::checkGlobalThreshold() {
 		    } else {
 		    	// failure
 		      TRACEP1("$$$$ oldvalue set failed: %1%", g_gGrassDB->error().name());
+		      writelog("failed: oldvalue set failed");
 		      abort();
 		    }
 		} else {
@@ -880,6 +883,7 @@ bool AlertStoreDBAll::checkGlobalThreshold() {
 			logging && TRACEP1("[G] newer timeslot appeared [%1%]", grecord->timeslot);
 			if (this->m_ctx->isBatchMode) {
 				// バッチではここに分岐しない
+				writelog("failed: newer timeslot appeared");
 				abort();
 			} else {
 				// バッチじゃなければ、処理中に追加されたレコードなのでムシする
@@ -1024,6 +1028,7 @@ bool AlertStoreDB1Stage::checkGlobalThreshold() {
 		    } else {
 		    	// failure
 		      TRACEP1("$$$$ oldvalue set failed: %1%", g_gGrassDB->error().name());
+				writelog("failed: ");
 		      abort();
 		    }
 		} else {
@@ -1137,6 +1142,7 @@ bool AlertStoreDB1Stage::checkGlobalThreshold() {
 			logging && TRACEP1("[G] newer timeslot appeared [%1%]", grecord->timeslot);
 			if (this->m_ctx->isBatchMode) {
 				// バッチではここに分岐しない
+				writelog("failed: ");
 				abort();
 			} else {
 				// バッチじゃなければ、処理中に追加されたレコードなのでムシする
@@ -1251,6 +1257,7 @@ bool AlertStoreDB2Stage::checkGlobalThreshold() {
 		    } else {
 		    	// failure
 		      TRACEP1("$$$$ oldvalue set failed: %1%", g_gGrassDB->error().name());
+				writelog("failed: ");
 		      abort();
 		    }
 		} else {
@@ -1363,6 +1370,7 @@ bool AlertStoreDB2Stage::checkGlobalThreshold() {
 			logging && TRACEP1("[G] newer timeslot appeared [%1%]", grecord->timeslot);
 			if (this->m_ctx->isBatchMode) {
 				// バッチではここに分岐しない
+				writelog("failed: ");
 				abort();
 			} else {
 				// バッチじゃなければ、処理中に追加されたレコードなのでムシする

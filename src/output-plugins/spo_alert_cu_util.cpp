@@ -167,6 +167,7 @@ int getIDfromStr(const char *idseed_str, std::string &id_str) {
 	if (result) {
 		id_str.assign(md);
 	} else {
+		writelog("failed: getIDfromChar");
 		abort();
 	}
 	return result;
@@ -244,6 +245,7 @@ void getNodeListFile(const char *nodelistfile, SpoAlertCuData *ctx, std::map<std
                 // unknown
                 {
 					TRACE1("unknown key[%1%]\n", key_str.c_str());
+					writelog("failed: unknown key");
 					abort();
                 }
     		}
@@ -251,11 +253,13 @@ void getNodeListFile(const char *nodelistfile, SpoAlertCuData *ctx, std::map<std
 
 	} catch(YAML::Exception &e) {
 		TRACE1("error:%1%\n", e.what());
+		writelog("failed: YAML");
 		abort();
 	}
 
 	if (0 == g_nodes.size()) {
 		TRACE("nodelistfile incomplete!\n");
+		writelog("failed: nodelistfile imcomplete");
 		abort();
 	}
 
@@ -386,6 +390,7 @@ void getConfFile(const char *conffile, SpoAlertCuData *ctx) {
 						// unknown
 						{
 							std::cerr << "unknown key [" << key_str.c_str() << "]\n";
+							writelog("failed: unknown key");
 							abort();
 						}
 	            	}
@@ -430,6 +435,7 @@ void getConfFile(const char *conffile, SpoAlertCuData *ctx) {
                 // unknown
                 {
 					TRACE1("unknown key[%1%]\n", key_str.c_str());
+					writelog("failed: uhnknown key");
 					abort();
                 }
     		}
@@ -437,6 +443,7 @@ void getConfFile(const char *conffile, SpoAlertCuData *ctx) {
 
 	} catch(YAML::Exception &e) {
 		TRACE1("error:%1%\n", e.what());
+		writelog("failed: YAML");
 		abort();
 	}
 
@@ -448,6 +455,7 @@ void getConfFile(const char *conffile, SpoAlertCuData *ctx) {
 		ctx->blacklistLastTimeSlotSize < 0
 		) {
 		TRACE("conffile incomplete!\n");
+		writelog("failed: conffile incomplete");
 		abort();
 	}
 

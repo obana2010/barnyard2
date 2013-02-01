@@ -60,7 +60,7 @@ extern std::map<std::string, std::vector <CIDNNode *> *> g_domainNodeLists;
   RV Worker::do_join_domain(kt::RPCServer* serv, kt::RPCServer::Session* sess,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap) {
-	TRACEP("$$$$ do_join_domain called");
+//	TRACEP("$$$$ do_join_domain called");
     uint32_t thid = sess->thread_id();
 
     // ドメインID

@@ -83,6 +83,7 @@ extern "C" void AlertCuInitCpp(SpoAlertCuData *ctx) {
 		// 特定ドメイン共有のマネージャ作成
 		g_manager = new CIDNManager2Stage(ctx);
     } else {
+		writelog("failed: ");
     	abort();
     }
     // 初期化

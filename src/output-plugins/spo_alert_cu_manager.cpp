@@ -97,6 +97,7 @@ bool CIDNManagerImpl::connectRemoteServer(kyototycoon::RemoteDB &client, std::st
 	char ip[100];
 	int port;
 	if (!getRemoteServer(id_str.c_str(), ip, sizeof(ip), &port)) {
+		writelog("failed: connectRemoteServer");
 		abort();
 		return false;
 	}
@@ -126,11 +127,13 @@ bool CIDNManagerImpl::joinCIDN() {
 		bool result = connectRemoteServer(client, domainid);
 		if (!result){
 			// TODO 接続失敗
+			writelog("failed: connectRemoteServer");
 			abort();
 		} else {
 			// domain list holderにドメイン参加要求をだす
 			result = client.joinDomain(domainid, this->m_ctx->cktip, this->m_ctx->cktport);
 			if (!result) {
+				writelog("failed: joinDomain");
 				TRACEP2("**** joinDomain failed: [%1%] [%2%]", client.error().name(), client.error().message());
 				return false;
 			}
@@ -151,6 +154,7 @@ bool CIDNManagerImpl::init() {
 	// 初期化
 	if (!this->m_ildb->init()) {
 		TRACEP("**** init failed");
+		writelog("failed: init");
 		abort();
 	}
 	TRACEP("**** opend local alert store");
@@ -159,6 +163,7 @@ bool CIDNManagerImpl::init() {
 	g_gGrassDB = new kyotocabinet::GrassDB();
 	if (!g_gGrassDB->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_gGrassDB->error().name());
+		writelog("failed: open global alertstore");
 		abort();
 	}
 	TRACEP("**** opend global alert store");
@@ -167,6 +172,7 @@ bool CIDNManagerImpl::init() {
 	g_blacklist = new kyotocabinet::GrassDB();
 	if (!g_blacklist->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_blacklist->error().name());
+		writelog("failed: open blacklist");
 		abort();
 	}
 	TRACEP("**** opend blacklist");
@@ -290,6 +296,7 @@ bool CIDNManagerAll::init() {
 	// 初期化
 	if (!this->m_ildb->init()) {
 		TRACEP("**** init failed");
+		writelog("failed: init");
 		abort();
 	}
 
@@ -297,6 +304,7 @@ bool CIDNManagerAll::init() {
 	g_gGrassDB = new kyotocabinet::GrassDB();
 	if (!g_gGrassDB->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_gGrassDB->error().name());
+		writelog("failed: open global alertstore");
 		abort();
 	}
 	TRACEP("**** opend global alert store");
@@ -305,6 +313,7 @@ bool CIDNManagerAll::init() {
 	g_blacklist = new kyotocabinet::GrassDB();
 	if (!g_blacklist->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_blacklist->error().name());
+		writelog("failed: open blacklist");
 		abort();
 	}
 	TRACEP("**** opend blacklist");
@@ -339,6 +348,7 @@ bool CIDNManager1Stage::init() {
 	// 初期化
 	if (!this->m_ildb->init()) {
 		TRACEP("**** init failed");
+		writelog("failed: init");
 		abort();
 	}
 
@@ -346,6 +356,7 @@ bool CIDNManager1Stage::init() {
 	g_gGrassDB = new kyotocabinet::GrassDB();
 	if (!g_gGrassDB->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_gGrassDB->error().name());
+		writelog("failed: open global alertstore");
 		abort();
 	}
 	TRACEP("**** opend global alert store");
@@ -354,6 +365,7 @@ bool CIDNManager1Stage::init() {
 	g_blacklist = new kyotocabinet::GrassDB();
 	if (!g_blacklist->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_blacklist->error().name());
+		writelog("failed: open blacklist");
 		abort();
 	}
 	TRACEP("**** opend blacklist");
@@ -387,6 +399,7 @@ bool CIDNManager2Stage::init() {
 	this->m_ildb = new AlertStoreDB2Stage(this->m_ctx, this);
 	// 初期化
 	if (!this->m_ildb->init()) {
+		writelog("failed: init");
 		abort();
 	}
 
@@ -394,6 +407,7 @@ bool CIDNManager2Stage::init() {
 	g_gGrassDB = new kyotocabinet::GrassDB();
 	if (!g_gGrassDB->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_gGrassDB->error().name());
+		writelog("failed: open global alertstore");
 		abort();
 	}
 	TRACEP("**** opend global alert store");
@@ -402,6 +416,7 @@ bool CIDNManager2Stage::init() {
 	g_blacklist = new kyotocabinet::GrassDB();
 	if (!g_blacklist->open("*", kyotocabinet::GrassDB::OWRITER | kyotocabinet::GrassDB::OCREATE)) {
 		TRACEP1("**** open failed: %1%", g_blacklist->error().name());
+		writelog("failed: open blacklist");
 		abort();
 	}
 	TRACEP("**** opend blacklist");
