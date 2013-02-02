@@ -697,6 +697,7 @@ bool AlertStoreDB::storeAlert(PacketData *pdata) {
 
     if (-1 == g_blacklist->check(pdata->ip_src_str, strlen(pdata->ip_src_str))) {
     	// 一致するものがなかった場合
+    	writelog("blacklistNotHit\t%s", pdata->ip_src_str); // log出力
     } else {
     	// 一致するものがあった場合
     	writelog("blacklistHit\t%s", pdata->ip_src_str); // log出力
