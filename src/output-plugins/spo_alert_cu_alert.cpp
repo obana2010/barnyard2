@@ -333,8 +333,12 @@ bool AlertStoreDB::checkThreshold() {
 	if (!this->checkLocalThreshold())
 		return false;
 	// グローバルアラート閾値超過判定
-	if (!this->checkGlobalThreshold())
-		return false;
+	if (0 == (this->m_ctx->current_timeslot % this->m_ctx->globalAlertTimeSlotSize)) {
+		if (!this->checkGlobalThreshold())
+			return false;
+	} else {
+		TRACEP("skip global alert check");
+	}
 	// ブラックリスト期限管理
 	if (!this->checkBlacklistExpired())
 		return false;
