@@ -40,6 +40,9 @@ std::map<std::string, std::vector <CIDNNode *> *> g_domainNodeLists;
 
 // 取得済みドメインノードリスト一覧
 std::set<std::string> g_domainlists_set;
+
+// 1台で実験するためにグローバルとする 集中型で実験するのでOK
+GlobalAlertStoreDB *g_globalAlertStore = NULL;
 // ****************************************************************************
 // typedef
 typedef std::map<std::string, std::string> nodelist_type;
@@ -47,6 +50,7 @@ typedef std::map<std::string, std::vector <CIDNNode *> *> nodelistmap_type;
 typedef std::map<std::string, unsigned long> blacklist_type;
 
 // ****************************************************************************
+#if 0
 // local alert store client
 bool AlertStoreDB::storeGlobalAlertData(const std::string &sourceip, const unsigned long timeslot, unsigned long count) {
 
@@ -77,6 +81,45 @@ bool AlertStoreDB::storeGlobalAlertData(const std::string &sourceip, const unsig
 	return true;
 
 }
+#endif
+
+// local alert store client
+// 実験用に接続を使い回しにしたもの 集中型なので可能
+bool AlertStoreDB::storeGlobalAlertData(const std::string &sourceip, const unsigned long timeslot, unsigned long count) {
+
+	TRACEP("**** storeGlobalAlertData called");
+
+	// ハッシュを求める
+	std::string id_str;
+	getIDfromStr(sourceip.c_str(), id_str);
+
+	// ノードIDをIP:PORTとして作成する
+	char nodeid[NODEID_MAX];
+	formatNodeID(nodeid, NODEID_MAX, this->m_ctx->cktip, this->m_ctx->cktport);
+
+	if (!g_globalAlertStore) {
+		g_globalAlertStore = new GlobalAlertStoreDB();
+
+		// 接続する
+		bool result = this->m_imanager->connectRemoteServer(*g_globalAlertStore, id_str);
+		if (!result) {
+			return false;
+		}
+
+	}
+
+	// global alert storeにアラートを格納する
+	bool result = g_globalAlertStore->storeGlobalAlert(sourceip, g_domainids, timeslot, count, nodeid);
+	if (!result) {
+		TRACEP2("**** storeGlobalAlertData failed: [%1%] [%2%]", g_globalAlertStore->error().name(), g_globalAlertStore->error().message());
+		return false;
+	}
+
+//	g_globalAlertStore->close();
+	return true;
+
+}
+
 
 // 初期化
 bool AlertStoreDB::init() {
