@@ -13,6 +13,9 @@
 
 // C++ headers
 #include <boost/lexical_cast.hpp>
+#include <map>
+#include <vector>
+#include <sstream>
 
 // Barnyard2 headers
 #include "unified2.h"
@@ -29,8 +32,6 @@
 
 // KyotoTycoon headers
 #include "cmdcommon.h"
-#include <map>
-#include <vector>
 
 #include "spo_alert_cu_kt_mod.h"
 
@@ -52,6 +53,8 @@ extern kyotocabinet::GrassDB *g_gGrassDB;
 extern kyotocabinet::GrassDB *g_blacklist;
 // ドメインノードリスト ドメインID => ドメインノードリスト
 extern std::map<std::string, std::vector <CIDNNode *> *> g_domainNodeLists;
+
+unsigned long g_last_blacklist_timeslot;
 
 // Workerの実装
 // **************************************************************************
@@ -270,6 +273,9 @@ extern std::map<std::string, std::vector <CIDNNode *> *> g_domainNodeLists;
     std::string value(tbuf);
 	g_blacklist->set(key, value);
 
+	// 最新のブラックリスト更新タイムスロットを保存
+	g_last_blacklist_timeslot = g_ctx->current_timeslot;
+
     rv = kt::RPCClient::RVSUCCESS;
 	return rv;
   }
@@ -301,18 +307,64 @@ extern std::map<std::string, std::vector <CIDNNode *> *> g_domainNodeLists;
 	    }
 		++it;
     }
-#if 0
-	// ブラックリストでループ
-	typedef std::map<std::string, unsigned long> blacklist_type;
-	for (blacklist_type::const_iterator i = g_blacklist.begin(); i != g_blacklist.end(); ++i) {
-		const std::string &sourceip = i->first;
-		const unsigned long timeslot = i->second;
-		set_message(outmap, "", "sourceip [%s] timeslot [%s]", sourceip.c_str(), timeslot);
-	}
-#endif
     // ローカルアラートを出力? TODO
     // グローバルアラートを出力? TODO
 
     rv = kt::RPCClient::RVSUCCESS;
     return rv;
+  }
+
+
+  // **************************************************************************
+  // process the do_get_blacklist procedure
+  // [detection] -> [domain list holder]
+  RV Worker::do_get_blacklist(kt::RPCServer* serv, kt::RPCServer::Session* sess,
+            const std::map<std::string, std::string>& inmap,
+            std::map<std::string, std::string>& outmap) {
+	TRACEP("$$$$ do_get_blacklist called");
+    uint32_t thid = sess->thread_id();
+
+    // シリアル番号
+    size_t ssiz;
+    const char* sbuf = kt::strmapget(inmap, CU_MESSAGE_SERIALNO, &ssiz);
+    if (!sbuf) {
+      set_message(outmap, "ERROR", "invalid parameters");
+      return kt::RPCClient::RVEINVALID;
+    }
+    RV rv;
+    opcounts_[thid][CNTSET]++;
+
+    // シリアル番号 引数
+    std::stringstream ss;
+    unsigned long serialno;
+    ss << sbuf;
+	ss >> serialno;
+
+	// シリアル番号 最新
+	ss.clear();
+	ss.str("");
+	ss << g_last_blacklist_timeslot;
+
+    if (serialno < g_last_blacklist_timeslot) {
+    	TRACEP1("$$$$ dump blacklist [%1%]", sbuf);
+
+    	// シリアル番号
+        set_message(outmap, CU_MESSAGE_SERIALNO, ss.str().c_str());
+
+        // ブラックリストを編集して戻す
+    	std::string ckey, cvalue;
+    	kyotocabinet::GrassDB::Cursor *gcur = g_blacklist->cursor();
+    	gcur->jump();
+    	while (gcur->get(&ckey, &cvalue, true)) {
+        	TRACEP2("$$$$ blacklist [%1%][%2%]", ckey, cvalue);
+            set_message(outmap, ckey.c_str(), cvalue.c_str());
+    	}
+    	delete gcur;
+    } else {
+    	// 更新されていなければ、空で返す
+    	TRACEP1("$$$$ no new blacklist [%1%]", sbuf);
+    }
+
+	rv = kt::RPCClient::RVSUCCESS;
+	return rv;
   }

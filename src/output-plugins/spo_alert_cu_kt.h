@@ -17,6 +17,8 @@
 #define CU_MESSAGE_TIMESLOT  "timeslot"
 #define CU_MESSAGE_COUNT     "count"
 
+#define CU_MESSAGE_SERIALNO  "serialno"
+
 #define CU_METHOD_JOIN_DOMAIN           "join_domain"
 #define CU_METHOD_STORE_GLOBAL_ALERT    "store_global_alert"
 #define CU_METHOD_GET_DOMAIN_NODE_LIST  "get_domain_node_list"

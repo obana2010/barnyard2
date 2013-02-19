@@ -57,57 +57,48 @@ for (int hexdump_i = 0; hexdump_i < hexdump_size; hexdump_i++){ \
 
 // トレースログ出力 ポート番号を含める
 extern SpoAlertCuData *g_ctx;
-#if 0
-#define TRACEP(f) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) << std::endl;
-#define TRACEP0(f) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) << std::endl;
-#define TRACEP1(f, a) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) % a << std::endl;
-#define TRACEP2(f, a, b) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) % a % b << std::endl;
-#define TRACEP3(f, a, b, c) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) % a % b % c << std::endl;
-#define TRACEP4(f, a, b, c, d) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) % a % b % c % d << std::endl;
-#define TRACEP5(f, a, b, c, d, e) std::cout << "[" << g_ctx->cktport << "]" << boost::format(f) % a % b % c % d % e << std::endl;
-#endif
 
 #define TRACEP(f) \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) << std::endl; \
+			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) << std::endl; \
 		}
 #define TRACEP0(f) \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) << std::endl; \
+			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) << std::endl; \
 		}
 #define TRACEP1(f, a)  \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) % a << std::endl; \
+			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) % a << std::endl; \
 		}
 #define TRACEP2(f, a, b)  \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) % a % b << std::endl; \
+		 	std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) % a % b << std::endl; \
 		}
 #define TRACEP3(f, a, b, c)  \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) % a % b % c << std::endl; \
+			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) % a % b % c << std::endl; \
 		}
 #define TRACEP4(f, a, b, c, d)  \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) % a % b % c % d << std::endl; \
+			std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) % a % b % c % d << std::endl; \
 		}
 #define TRACEP5(f, a, b, c, d, e)  \
 		1; { \
 			char timestamp[100]; \
 			formatTimeStampLog(timestamp, sizeof(timestamp)); \
-		std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "]" << boost::format(f) % a % b % c % d % e << std::endl; \
+		std::cout << timestamp << " [" << g_ctx->cktport << "]" << " [" << g_ctx->current_timeslot << "] " << boost::format(f) % a % b % c % d % e << std::endl; \
 		}
 
 

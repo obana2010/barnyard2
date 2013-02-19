@@ -61,6 +61,11 @@ class Worker : public kt::RPCServer::Worker {
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
 
+  // ブラックリスト取得
+  RV do_get_blacklist(kt::RPCServer* serv, kt::RPCServer::Session* sess,
+            const std::map<std::string, std::string>& inmap,
+            std::map<std::string, std::string>& outmap);
+
   int32_t thnum_;
   kc::CondMap* const condmap_;
   kt::TimedDB* const dbs_;

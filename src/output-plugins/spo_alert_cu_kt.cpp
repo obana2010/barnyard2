@@ -489,18 +489,6 @@ class Worker : public kt::RPCServer::Worker {
       rv = do_cur_seize(serv, sess, cur, inmap, outmap);
 
       // add start
-/*
-    } else if (name == CU_METHOD_JOIN_DOMAIN) {
-      rv = do_join_domain(serv, sess, db, inmap, outmap);
-    } else if (name == CU_METHOD_STORE_GLOBAL_ALERT) {
-      rv = do_store_global_alert(serv, sess, db, inmap, outmap);
-    } else if (name == CU_METHOD_GET_DOMAIN_NODE_LIST) {
-      rv = do_get_domain_node_list(serv, sess, db, inmap, outmap);
-    } else if (name == CU_METHOD_SHARE_BLACKLIST) {
-      rv = do_share_blacklist(serv, sess, db, inmap, outmap);
-    } else if (name == CU_METHOD_CU_STATUS) {
-      rv = do_cu_status(serv, sess, db, inmap, outmap);
-*/
     } else if (name == CU_METHOD_JOIN_DOMAIN) {
       rv = do_join_domain(serv, sess, inmap, outmap);
     } else if (name == CU_METHOD_STORE_GLOBAL_ALERT) {
@@ -511,6 +499,8 @@ class Worker : public kt::RPCServer::Worker {
       rv = do_share_blacklist(serv, sess, inmap, outmap);
     } else if (name == CU_METHOD_CU_STATUS) {
       rv = do_cu_status(serv, sess, inmap, outmap);
+    } else if (name == CU_METHOD_GET_BLACKLIST) {
+      rv = do_get_blacklist(serv, sess, inmap, outmap);
       // add end
 
     } else {
@@ -701,27 +691,26 @@ class Worker : public kt::RPCServer::Worker {
 
   // add start
   RV do_join_domain(kt::RPCServer* serv, kt::RPCServer::Session* sess,
-            //kt::TimedDB* db,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
 
   RV do_store_global_alert(kt::RPCServer* serv, kt::RPCServer::Session* sess,
-            //kt::TimedDB* db,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
 
   RV do_get_domain_node_list(kt::RPCServer* serv, kt::RPCServer::Session* sess,
-            //kt::TimedDB* db,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
 
   RV do_share_blacklist(kt::RPCServer* serv, kt::RPCServer::Session* sess,
-            //kt::TimedDB* db,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
 
   RV do_cu_status(kt::RPCServer* serv, kt::RPCServer::Session* sess,
-            //kt::TimedDB* db,
+            const std::map<std::string, std::string>& inmap,
+            std::map<std::string, std::string>& outmap);
+
+  RV do_get_blacklist(kt::RPCServer* serv, kt::RPCServer::Session* sess,
             const std::map<std::string, std::string>& inmap,
             std::map<std::string, std::string>& outmap);
   // add end

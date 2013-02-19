@@ -694,11 +694,6 @@ bool AlertStoreDB::storeAlert(PacketData *pdata) {
 
 	// ブラックリストがヒットしているかをチェックする
 	// 実際にはSnortのプリプロセッサでチェックする
-//	if (g_blacklist.find(pdata->ip_src_str) != g_blacklist.end()) {
-//writelog("blacklistHit\t%s", pdata->ip_src_str); // log出力
-//		TRACEP3("**** hit blacklist [%1%][%2%:%3%]", pdata->ip_src_str, pdata->ip_dst_str, pdata->port_dst);
-//	}
-
     if (-1 == g_blacklist->check(pdata->ip_src_str, strlen(pdata->ip_src_str))) {
     	// 一致するものがなかった場合
     	writelog("blacklistNotHit\t%s", pdata->ip_src_str); // log出力
