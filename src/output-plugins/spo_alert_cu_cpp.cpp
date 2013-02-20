@@ -90,7 +90,7 @@ extern "C" void AlertCuInitCpp(SpoAlertCuData *ctx) {
     g_manager->init();
 
     // ローカルのktserverが起動するまで待つ
-    sleep(60);
+    sleep(20);
 
     // CIDNに参加する。
     g_manager->joinCIDN();
