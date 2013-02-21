@@ -126,6 +126,12 @@ void AlertCu(Packet *p, void *event, u_int32_t event_type, void *arg)
             (unsigned long) ntohl((u_event)->signature_id),
             (unsigned long) ntohl((u_event)->signature_revision));
 
+    /* デモ用 ノイズがでてしまうようだ */
+    if (129 == (unsigned long) ntohl((u_event)->generator_id)) {
+    	fprintf(ctx->file, "**** for demo ignore stream5\n");
+    	return;
+    }
+
     /* シグニチャを取得 */
 	SigNode *sn = GetSigByGidSid(ntohl((u_event)->generator_id), ntohl((u_event)->signature_id));
 	if(sn)
